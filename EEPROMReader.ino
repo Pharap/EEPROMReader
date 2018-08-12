@@ -61,7 +61,7 @@ void loop() {
   for (int16_t x = eepromLocation - 12, y = 0; x < eepromLocation + 13; x++, y++) {
 
     uint16_t location = (x < 0 ? x + 1024 : (x > 1023 ? x - 1024 : x));
-    uint8_t val = EEPROM.read(location);
+    uint8_t val = eeprom_read_byte(reinterpret_cast<const uint8_t *>(location));
 
     switch (y / 5) {
 
@@ -128,7 +128,7 @@ void loop() {
 
       if (arduboy.justPressed(A_BUTTON))      { 
         mode = EditMode::Edit; 
-        origValue = EEPROM.read(eepromLocation); 
+        origValue = eeprom_read_byte(reinterpret_cast<const uint8_t *>(eepromLocation)); 
       }
 
       break;
@@ -161,7 +161,7 @@ void printDec(uint8_t data) {
 
 void printBinary(uint16_t location) {
 
-  uint8_t data = EEPROM.read(location);
+  uint8_t data = eeprom_read_byte(reinterpret_cast<const uint8_t *>(location));
 
   sprintf(text, "%c%c%c%c %c%c%c%c",
     (data & 0x80) ? '1' : '0',
@@ -180,14 +180,14 @@ void printBinary(uint16_t location) {
 
 void incValue() {
 
-  uint8_t data = EEPROM.read(eepromLocation);
-  EEPROM.update(eepromLocation, data + 1);
+  uint8_t data = eeprom_read_byte(reinterpret_cast<const uint8_t *>(eepromLocation));
+  eeprom_update_byte(reinterpret_cast<const uint8_t *>(eepromLocation), data + 1);
 
 }
 
 void decValue() {
 
-  uint8_t data = EEPROM.read(eepromLocation);
-  EEPROM.update(eepromLocation, data - 1);
+  uint8_t data = eeprom_read_byte(reinterpret_cast<const uint8_t *>(eepromLocation));
+  eeprom_update_byte(reinterpret_cast<const uint8_t *>(eepromLocation), data - 1);
   
 }
